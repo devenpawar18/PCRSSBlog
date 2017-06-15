@@ -58,6 +58,11 @@ public class ViewUtils {
         transaction.commit();
     }
 
+    /**
+     * @param pContext
+     * @param pDp
+     * @return Pixels from DP
+     */
     public static int getPixelsFromDP(final Context pContext, final int pDp) {
         final Resources resources = pContext.getResources();
         return (int) TypedValue.applyDimension(

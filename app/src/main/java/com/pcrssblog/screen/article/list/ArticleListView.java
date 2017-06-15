@@ -222,7 +222,7 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
         this.mTitle = new TextView(this.mContext);
         RelativeLayout.LayoutParams headerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         headerParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        headerParams.setMargins(0, 50, 20, 50);
+        headerParams.setMargins(0, ViewUtils.getPixelsFromDP(this.mContext, 12), ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12));
         this.mTitle.setLayoutParams(headerParams);
         this.mTitle.setGravity(Gravity.CENTER_HORIZONTAL);
         this.mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_list_header));
@@ -234,7 +234,7 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
         this.mRefresh = new ImageView(this.mContext);
         RelativeLayout.LayoutParams refreshParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         refreshParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        refreshParams.setMargins(0, 50, 20, 50);
+        refreshParams.setMargins(0, ViewUtils.getPixelsFromDP(this.mContext, 12), ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12));
         this.mRefresh.setLayoutParams(refreshParams);
         this.mRefresh.setTag(REFRESH_VIEW);
         this.mRefresh.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.ic_refresh));

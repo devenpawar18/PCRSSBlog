@@ -148,7 +148,7 @@ public class ArticleDetailView extends Fragment implements ArticleDetailContract
         this.mTitle = new TextView(this.mContext);
         RelativeLayout.LayoutParams headerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         headerParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        headerParams.setMargins(20, 50, 20, 50);
+        headerParams.setMargins(0, ViewUtils.getPixelsFromDP(this.mContext, 12), ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12));
         this.mTitle.setLayoutParams(headerParams);
         this.mTitle.setGravity(Gravity.CENTER_HORIZONTAL);
         this.mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_detail_header));
