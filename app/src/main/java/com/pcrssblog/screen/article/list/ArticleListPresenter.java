@@ -25,10 +25,10 @@ public class ArticleListPresenter implements ArticleListContract.Presenter, Chan
     public void startFetching() {
         if (!this.mDownloading) {
             this.stopFetching();
+            mDownloading = true;
             this.mView.showProgressDialog();
             this.mChannelService = new ChannelService(this, this.mView.getContext());
             this.mChannelService.execute(CHANNEL_URL);
-            mDownloading = true;
         }
     }
 

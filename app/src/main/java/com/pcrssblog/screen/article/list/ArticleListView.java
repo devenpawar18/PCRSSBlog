@@ -213,33 +213,36 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
     }
 
     /**
-     * @return Header View
+     * @return HeaderView
      */
-    private RelativeLayout getHeaderView() {
+    @Override
+    public RelativeLayout getHeaderView() {
         RelativeLayout headerView = new RelativeLayout(this.mContext);
         headerView.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorPrimary));
-        // Title
-        this.mTitle = new TextView(this.mContext);
-        RelativeLayout.LayoutParams headerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        headerParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        headerParams.setMargins(0, ViewUtils.getPixelsFromDP(this.mContext, 12), ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12));
-        this.mTitle.setLayoutParams(headerParams);
-        this.mTitle.setGravity(Gravity.CENTER_HORIZONTAL);
-        this.mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_list_header));
-        this.mTitle.setTextColor(this.mContext.getResources().getColor(R.color.color_view_article_list_header));
-        this.mTitle.setSingleLine(true);
-        this.mTitle.setEllipsize(TextUtils.TruncateAt.END);
-        headerView.addView(this.mTitle, 0);
         // Refresh Icon
         this.mRefresh = new ImageView(this.mContext);
+        this.mRefresh.setId(1);
         RelativeLayout.LayoutParams refreshParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         refreshParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        refreshParams.setMargins(0, ViewUtils.getPixelsFromDP(this.mContext, 12), ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12));
+        refreshParams.setMargins(ViewUtils.getPixelsFromDP(this.mContext, 8), ViewUtils.getPixelsFromDP(this.mContext, 12), ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12));
         this.mRefresh.setLayoutParams(refreshParams);
         this.mRefresh.setTag(REFRESH_VIEW);
         this.mRefresh.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.ic_refresh));
         this.mRefresh.setOnClickListener(this);
-        headerView.addView(this.mRefresh, 1);
+        headerView.addView(this.mRefresh);
+        // Title
+        this.mTitle = new TextView(this.mContext);
+        RelativeLayout.LayoutParams headerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        headerParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        headerParams.addRule(RelativeLayout.LEFT_OF, this.mRefresh.getId());
+        headerParams.setMargins(ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12), 0, ViewUtils.getPixelsFromDP(this.mContext, 12));
+        this.mTitle.setLayoutParams(headerParams);
+        this.mTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+        this.mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_detail_header));
+        this.mTitle.setTextColor(this.mContext.getResources().getColor(R.color.color_view_article_detail_header));
+        this.mTitle.setSingleLine(true);
+        this.mTitle.setEllipsize(TextUtils.TruncateAt.END);
+        headerView.addView(this.mTitle);
         return headerView;
     }
 

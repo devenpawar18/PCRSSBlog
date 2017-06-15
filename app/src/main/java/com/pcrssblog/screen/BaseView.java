@@ -1,6 +1,7 @@
 package com.pcrssblog.screen;
 
 import android.content.Context;
+import android.widget.RelativeLayout;
 
 /**
  * Base View to link presenter
@@ -11,4 +12,6 @@ import android.content.Context;
 public interface BaseView<T> {
 
     void setPresenter(final Context pContext, final T pPresenter);
+
+    RelativeLayout getHeaderView();
 }

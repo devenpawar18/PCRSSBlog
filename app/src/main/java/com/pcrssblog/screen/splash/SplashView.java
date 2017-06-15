@@ -67,6 +67,11 @@ public class SplashView extends Fragment implements SplashContract.View {
         return (SplashActivity) getActivity();
     }
 
+    @Override
+    public RelativeLayout getHeaderView() {
+        return null;
+    }
+
     /**
      * @return SplashView
      */

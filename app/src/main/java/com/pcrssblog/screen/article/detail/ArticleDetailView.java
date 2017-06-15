@@ -1,5 +1,6 @@
 package com.pcrssblog.screen.article.detail;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,14 +28,16 @@ import com.pcrssblog.util.ViewUtils;
 /**
  * ArticleDetailView - A Fragment which implements the ArticleDetailContract.View interface.
  */
-public class ArticleDetailView extends Fragment implements ArticleDetailContract.View {
+public class ArticleDetailView extends Fragment implements ArticleDetailContract.View, View.OnClickListener {
     private static final String URL_DETAIL_QUERY = "?displayMobileNavigation=0";
     public static final String ARGUMENT_ARTICLE = "article";
+    private static final String REFRESH_VIEW = "refresh_view";
 
     private ArticleDetailContract.Presenter mPresenter;
     private Context mContext;
 
     private TextView mTitle;
+    private ImageView mRefresh;
     private WebView mWebView;
 
     private ProgressDialog mProgressDialog;
@@ -126,7 +130,7 @@ public class ArticleDetailView extends Fragment implements ArticleDetailContract
      */
     private LinearLayout getWebViewLayout() {
         LinearLayout layout = new LinearLayout(this.mContext);
-        final Article article = getArguments().getParcelable(ARGUMENT_ARTICLE);
+        final Article article = this.getArticle();
         if (article != null) {
             layout.setOrientation(LinearLayout.VERTICAL);
             this.mWebView = new WebView(this.mContext);
@@ -139,16 +143,37 @@ public class ArticleDetailView extends Fragment implements ArticleDetailContract
     }
 
     /**
+     * @return Article
+     */
+    private Article getArticle() {
+        return getArguments().getParcelable(ARGUMENT_ARTICLE);
+    }
+
+    /**
      * @return Article detail header view
      */
-    private RelativeLayout getHeaderView() {
+    @SuppressLint("ResourceType")
+    @Override
+    public RelativeLayout getHeaderView() {
         RelativeLayout headerView = new RelativeLayout(this.mContext);
         headerView.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorPrimary));
+        // Refresh Icon
+        this.mRefresh = new ImageView(this.mContext);
+        this.mRefresh.setId(1);
+        RelativeLayout.LayoutParams refreshParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        refreshParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        refreshParams.setMargins(ViewUtils.getPixelsFromDP(this.mContext, 8), ViewUtils.getPixelsFromDP(this.mContext, 12), ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12));
+        this.mRefresh.setLayoutParams(refreshParams);
+        this.mRefresh.setTag(REFRESH_VIEW);
+        this.mRefresh.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.ic_refresh));
+        this.mRefresh.setOnClickListener(this);
+        headerView.addView(this.mRefresh);
         // Title
         this.mTitle = new TextView(this.mContext);
-        RelativeLayout.LayoutParams headerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams headerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         headerParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        headerParams.setMargins(0, ViewUtils.getPixelsFromDP(this.mContext, 12), ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12));
+        headerParams.addRule(RelativeLayout.LEFT_OF, this.mRefresh.getId());
+        headerParams.setMargins(ViewUtils.getPixelsFromDP(this.mContext, 16), ViewUtils.getPixelsFromDP(this.mContext, 12), 0, ViewUtils.getPixelsFromDP(this.mContext, 12));
         this.mTitle.setLayoutParams(headerParams);
         this.mTitle.setGravity(Gravity.CENTER_HORIZONTAL);
         this.mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_detail_header));
@@ -157,5 +182,23 @@ public class ArticleDetailView extends Fragment implements ArticleDetailContract
         this.mTitle.setEllipsize(TextUtils.TruncateAt.END);
         headerView.addView(this.mTitle);
         return headerView;
+    }
+
+    /**
+     * Refresh Article Detail
+     *
+     * @param pView
+     */
+    @Override
+    public void onClick(final View pView) {
+        String tag = (String) pView.getTag();
+        switch (tag) {
+            case REFRESH_VIEW: {
+                final Article article = this.getArticle();
+                if (article != null) {
+                    this.updateView(article);
+                }
+            }
+        }
     }
 }
