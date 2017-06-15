@@ -80,7 +80,7 @@ public class SplashView extends Fragment implements SplashContract.View {
         headerParams.setMargins(20, 30, 20, 30);
         textView.setLayoutParams(headerParams);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_splash_title));
-        textView.setTextColor(this.mContext.getResources().getColor(R.color.color_title));
+        textView.setTextColor(this.mContext.getResources().getColor(R.color.color_view_splash_title));
         textView.setMaxLines(2);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setGravity(Gravity.CENTER);

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.pcrssblog.R;
 import com.pcrssblog.api.model.Article;
 import com.pcrssblog.api.service.ImageDownloaderService;
+import com.pcrssblog.util.ViewUtils;
 import com.pcrssblog.util.cache.ImageCache;
 
 import java.util.List;
@@ -29,8 +30,10 @@ import java.util.List;
 public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder> implements View.OnClickListener {
     private static final int TYPE_MAIN_ARTICLE = 0;
     private static final int TYPE_SUB_ARTICLE = 1;
-    private static final int MAIN_ARTICLE_IMAGE_HEIGHT = 800;
-    private static final int SUB_ARTICLE_IMAGE_HEIGHT = 500;
+    private static final int MAIN_ARTICLE_IMAGE_HEIGHT = 250;
+    private static final int SUB_ARTICLE_IMAGE_HEIGHT = 150;
+    private static final int MAIN_ARTICLE_HEIGHT = 335;
+    private static final int SUB_ARTICLE_HEIGHT = 200;
     private List<Article> mArticles;
     private Context mContext;
     private RecyclerView mRecyclerView;
@@ -74,12 +77,14 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
     public ArticleListAdapter.ArticleViewHolder onCreateViewHolder(ViewGroup pParent, int pViewType) {
         final Context context = pParent.getContext();
         LinearLayout mainView = this.getMainLinearLayout(context);
-        LinearLayout view = this.getLinearLayout(context);
+        LinearLayout view;
         if (pViewType == TYPE_MAIN_ARTICLE) {
+            view = this.getLinearLayout(context, true);
             view.addView(this.getImage(context, true), 0);
             view.addView(this.getTitle(context, true), 1);
             view.addView(this.getContent(context), 2);
         } else {
+            view = this.getLinearLayout(context, false);
             view.addView(this.getImage(context, false), 0);
             view.addView(this.getTitle(context, false), 1);
             view.addView(this.getContent(context), 2);
@@ -167,9 +172,14 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
      * @param pContext
      * @return Article View
      */
-    private LinearLayout getLinearLayout(final Context pContext) {
+    private LinearLayout getLinearLayout(final Context pContext, final boolean pMain) {
         LinearLayout view = new LinearLayout(pContext);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params;
+        if (pMain) {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewUtils.getPixelsFromDP(this.mContext, MAIN_ARTICLE_HEIGHT));
+        } else {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewUtils.getPixelsFromDP(this.mContext, SUB_ARTICLE_HEIGHT));
+        }
         view.setLayoutParams(params);
         view.setOrientation(LinearLayout.VERTICAL);
         view.setBackground(pContext.getResources().getDrawable(R.drawable.article_background));
@@ -186,10 +196,11 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         image.setScaleType(ImageView.ScaleType.FIT_XY);
         LinearLayout.LayoutParams params;
         if (pMain) {
-            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, MAIN_ARTICLE_IMAGE_HEIGHT);
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewUtils.getPixelsFromDP(this.mContext, MAIN_ARTICLE_IMAGE_HEIGHT));
         } else {
-            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SUB_ARTICLE_IMAGE_HEIGHT);
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewUtils.getPixelsFromDP(this.mContext, SUB_ARTICLE_IMAGE_HEIGHT));
         }
+        params.setMargins(ViewUtils.getPixelsFromDP(this.mContext, 1), ViewUtils.getPixelsFromDP(this.mContext, 1), ViewUtils.getPixelsFromDP(this.mContext, 1), 0);
         image.setLayoutParams(params);
         image.setImageResource(R.drawable.loading);
         return image;
@@ -202,9 +213,9 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
     private TextView getHeader(final Context pContext) {
         TextView header = new TextView(pContext);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 20, 0, 0);
+        params.setMargins(0, ViewUtils.getPixelsFromDP(this.mContext, 8), 0, 0);
         header.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_list_previous_article_header));
-        header.setTextColor(this.mContext.getResources().getColor(R.color.color_article_title));
+        header.setTextColor(this.mContext.getResources().getColor(R.color.color_view_article_list_title));
         header.setLayoutParams(params);
         header.setTypeface(null, Typeface.BOLD);
         return header;
@@ -217,19 +228,21 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
      */
     private TextView getTitle(final Context pContext, final boolean pMain) {
         TextView title = new TextView(pContext);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(20, 20, 20, 20);
-        params.gravity = Gravity.START;
+        LinearLayout.LayoutParams params;
         if (pMain) {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             title.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_list_title_main_size));
             title.setSingleLine(true);
         } else {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            title.setGravity(Gravity.CENTER_VERTICAL);
             title.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_list_title_size));
             title.setMaxLines(2);
         }
-        title.setTextColor(this.mContext.getResources().getColor(R.color.color_article_title));
-        title.setEllipsize(TextUtils.TruncateAt.END);
+        params.setMargins(ViewUtils.getPixelsFromDP(this.mContext, 8), ViewUtils.getPixelsFromDP(this.mContext, 8), ViewUtils.getPixelsFromDP(this.mContext, 8), ViewUtils.getPixelsFromDP(this.mContext, 8));
         title.setLayoutParams(params);
+        title.setTextColor(this.mContext.getResources().getColor(R.color.color_view_article_list_title));
+        title.setEllipsize(TextUtils.TruncateAt.END);
         return title;
     }
 
@@ -240,10 +253,9 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
     private TextView getContent(final Context pContext) {
         TextView content = new TextView(pContext);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(20, 0, 20, 20);
-        params.gravity = Gravity.START;
+        params.setMargins(ViewUtils.getPixelsFromDP(this.mContext, 8), 0, ViewUtils.getPixelsFromDP(this.mContext, 8), ViewUtils.getPixelsFromDP(this.mContext, 8));
         content.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_list_content_size));
-        content.setTextColor(this.mContext.getResources().getColor(R.color.color_article_content));
+        content.setTextColor(this.mContext.getResources().getColor(R.color.color_view_article_list_content));
         content.setMaxLines(2);
         content.setEllipsize(TextUtils.TruncateAt.END);
         content.setLayoutParams(params);

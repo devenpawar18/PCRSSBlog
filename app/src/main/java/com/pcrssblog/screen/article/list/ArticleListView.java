@@ -24,12 +24,17 @@ import android.widget.Toast;
 import com.pcrssblog.R;
 import com.pcrssblog.api.model.Article;
 import com.pcrssblog.api.model.Channel;
+import com.pcrssblog.screen.article.detail.ArticleDetailActivity;
+import com.pcrssblog.screen.article.detail.ArticleDetailView;
 import com.pcrssblog.util.SpacesItemDecoration;
 import com.pcrssblog.util.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ArticleListView - A Fragment which implements the ArticleListContract.View interface.
+ */
 public class ArticleListView extends Fragment implements ArticleListContract.View, ArticleListAdapter.OnListItemClickListener, View.OnClickListener {
     private static final String REFRESH_VIEW = "refresh_view";
     private static final int PORTRAIT_GRID = 2;
@@ -40,6 +45,7 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
     private TextView mTitle;
     private ImageView mRefresh;
     private RecyclerView mRecyclerView;
+    private GridLayoutManager mGridLayoutManager;
     private ArticleListAdapter mAdapter;
     private List<Article> mArticles = new ArrayList<>();
     private ProgressDialog mProgressDialog;
@@ -66,7 +72,6 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-
         LinearLayout layout = new LinearLayout(this.mContext);
         layout.setOrientation(LinearLayout.VERTICAL);
         RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -75,8 +80,10 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
         this.mDecoration = new SpacesItemDecoration(this.mContext, R.dimen.view_article_list_spacing);
         this.mRecyclerView.addItemDecoration(this.mDecoration);
         if (this.mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            this.mGridLayoutManager = new GridLayoutManager(getActivity(), LANDSCAPE_GRID);
             this.updateRecyclerView(LANDSCAPE_GRID);
         } else {
+            this.mGridLayoutManager = new GridLayoutManager(getActivity(), PORTRAIT_GRID);
             this.updateRecyclerView(PORTRAIT_GRID);
         }
         this.mAdapter = new ArticleListAdapter(this.mRecyclerView, this.mArticles, getActivity());
@@ -144,15 +151,20 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
         }
     }
 
+    /**
+     * Update Article List View based on orientation
+     *
+     * @param pColumns
+     */
     private void updateRecyclerView(final int pColumns) {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), pColumns);
-        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        this.mGridLayoutManager.setSpanCount(pColumns);
+        this.mGridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 return position == 0 ? pColumns : 1;
             }
         });
-        this.mRecyclerView.setLayoutManager(gridLayoutManager);
+        this.mRecyclerView.setLayoutManager(this.mGridLayoutManager);
     }
 
     @Override
@@ -177,6 +189,12 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
         Toast.makeText(this.mContext, pMessage, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Go to article detail screen
+     *
+     * @param pArticle
+     * @param position
+     */
     @Override
     public void onItemClick(final Article pArticle, final int position) {
         Intent intent = new Intent(getContext(), ArticleDetailActivity.class);
@@ -185,6 +203,11 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
         startActivity(intent);
     }
 
+    /**
+     * Update Header with Channel Title
+     *
+     * @param pChannel
+     */
     private void updateHeaderView(final Channel pChannel) {
         this.mTitle.setText(pChannel.getTitle());
     }
@@ -199,11 +222,11 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
         this.mTitle = new TextView(this.mContext);
         RelativeLayout.LayoutParams headerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         headerParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        headerParams.setMargins(0, 30, 20, 30);
+        headerParams.setMargins(0, 50, 20, 50);
         this.mTitle.setLayoutParams(headerParams);
         this.mTitle.setGravity(Gravity.CENTER_HORIZONTAL);
         this.mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mContext.getResources().getDimension(R.dimen.view_article_list_header));
-        this.mTitle.setTextColor(this.mContext.getResources().getColor(R.color.color_title));
+        this.mTitle.setTextColor(this.mContext.getResources().getColor(R.color.color_view_article_list_header));
         this.mTitle.setSingleLine(true);
         this.mTitle.setEllipsize(TextUtils.TruncateAt.END);
         headerView.addView(this.mTitle, 0);
@@ -211,7 +234,7 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
         this.mRefresh = new ImageView(this.mContext);
         RelativeLayout.LayoutParams refreshParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         refreshParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        refreshParams.setMargins(0, 30, 20, 30);
+        refreshParams.setMargins(0, 50, 20, 50);
         this.mRefresh.setLayoutParams(refreshParams);
         this.mRefresh.setTag(REFRESH_VIEW);
         this.mRefresh.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.ic_refresh));
@@ -220,6 +243,11 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
         return headerView;
     }
 
+    /**
+     * Refresh Article List
+     *
+     * @param pView
+     */
     @Override
     public void onClick(final View pView) {
         String tag = (String) pView.getTag();

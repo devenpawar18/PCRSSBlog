@@ -4,10 +4,13 @@
     <dimen name="view_splash_title">28sp</dimen>
 
     <!-- ArticleList View -->
-    <dimen name="view_article_list_header">16dp</dimen>
+    <dimen name="view_article_list_header">18dp</dimen>
     <dimen name="view_article_list_spacing">4dp</dimen>
     <dimen name="view_article_list_previous_article_header">16dp</dimen>
     <dimen name="view_article_list_title_main_size">16sp</dimen>
     <dimen name="view_article_list_title_size">14sp</dimen>
     <dimen name="view_article_list_content_size">14sp</dimen>
+
+    <!-- ArticleDetail View -->
+    <dimen name="view_article_detail_header">18dp</dimen>
 </resources>

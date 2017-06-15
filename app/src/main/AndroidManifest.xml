@@ -2,6 +2,9 @@
 <manifest package="com.pcrssblog"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,15 +12,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".screen.article.list.ArticleListActivity">
-        </activity>
-        <activity android:name=".screen.splash.SplashActivity">
+        <activity
+            android:name=".screen.splash.SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".screen.article.list.ArticleListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+        </activity>
+        <activity
+            android:name=".screen.article.detail.ArticleDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+        </activity>
     </application>
-
 </manifest>

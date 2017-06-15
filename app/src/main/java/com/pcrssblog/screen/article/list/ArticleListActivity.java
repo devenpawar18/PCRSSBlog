@@ -18,11 +18,11 @@ public class ArticleListActivity extends AppCompatActivity {
         final FrameLayout container = new FrameLayout(this);
         setContentView(container);
 
-        // Initialize ArticleView
-        final ArticleListView mainView = ArticleListView.newInstance();
-        ViewUtils.addViewToActivity(getSupportFragmentManager(), mainView);
+        // Initialize ArticleListView
+        final ArticleListView articleListView = ArticleListView.newInstance();
+        ViewUtils.addViewToActivity(getSupportFragmentManager(), articleListView);
 
-        // Initialize ArticlePresenter
-        new ArticleListPresenter(mainView, this);
+        // Initialize ArticleListPresenter
+        new ArticleListPresenter(articleListView, this);
     }
 }

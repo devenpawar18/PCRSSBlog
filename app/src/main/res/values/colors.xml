@@ -3,8 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="color_title">#FFFFFF</color>
-    <color name="color_article_title">#080808</color>
-    <color name="color_article_content">#545454</color>
-    <color name="color_article_border">#C8C8C8</color>
+    <!-- Splash View -->
+    <color name="color_view_splash_title">#FFFFFF</color>
+    <!-- ArticleList View -->
+    <color name="color_view_article_list_header">#FFFFFF</color>
+    <color name="color_view_article_list_title">#080808</color>
+    <color name="color_view_article_list_content">#545454</color>
+    <color name="color_article_list_card_border">#C8C8C8</color>
+    <!-- ArticleDetail View -->
+    <color name="color_view_article_detail_header">#FFFFFF</color>
 </resources>
