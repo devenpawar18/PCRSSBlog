@@ -1,5 +1,6 @@
 package com.pcrssblog.screen.article.list;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -215,6 +216,7 @@ public class ArticleListView extends Fragment implements ArticleListContract.Vie
     /**
      * @return HeaderView
      */
+    @SuppressLint("ResourceType")
     @Override
     public RelativeLayout getHeaderView() {
         RelativeLayout headerView = new RelativeLayout(this.mContext);
