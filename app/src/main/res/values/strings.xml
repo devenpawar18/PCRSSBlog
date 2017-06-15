@@ -5,6 +5,7 @@
     <string name="view_splash_title">Personal Capital\nRSS Blog</string>
 
     <!-- ArticleList View -->
+    <string name="view_article_list_previous_articles">Previous Articles</string>
     <string name="view_article_list_fetching_articles">Fetching articles&#8230;</string>
     <string name="view_article_list_fetching_failure_no_network">No network&#8230;Please check your connectivity!</string>
     <string name="view_article_list_fetching_failure_refresh">Network error&#8230;Please refresh!</string>
