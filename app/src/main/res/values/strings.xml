@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">PCRSSBlog</string>
+
+    <!-- Splash View -->
+    <string name="view_splash_title">Personal Capital\nRSS Blog</string>
+
+    <!-- ArticleList View -->
+    <string name="view_article_list_fetching_articles">Fetching articles&#8230;</string>
+    <string name="view_article_list_fetching_failure_no_network">No network&#8230;Please check your connectivity!</string>
+    <string name="view_article_list_fetching_failure_refresh">Network error&#8230;Please refresh!</string>
+    <string name="view_article_list_fetching_failure_parsing">Parsing error&#8230;Please refresh!</string>
+
+    <!-- ArticleDetail View -->
+    <string name="view_article_detail_loading_article">Loading article&#8230;</string>
+    <string name="view_article_detail_web_view_error">Something went wrong&#8230;Please try again</string>
 </resources>
